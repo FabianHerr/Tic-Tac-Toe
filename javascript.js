@@ -1,4 +1,4 @@
-//Gameboard module
+//GameBoard module
 function GameBoard(){
      const board = [];
      
@@ -15,14 +15,18 @@ function GameBoard(){
     function chooseCell(row, column){
         const cell = board[row][column];
         if (cell.getState() === 0){
-            cell.setState(curPlayer.token);
+            const token = curPlayer.token; // capture current player
+            cell.setState(token);
             printGameBoard();
             if(checkWinner()) { 
-               return curPlayer.token ; // If winner, return winner;
+                return token; // return winner's token
             }
             switchPlayer();
+            return token; // return current player's token so UI updates
         }
-        else{return 0;}  // 0 meaning invalid cell
+        else {
+            return 0; // 0 meaning invalid cell
+        }
     }
 
     //Each cell's state
@@ -78,7 +82,7 @@ function GameBoard(){
             return false;
     }
 
-    return {chooseCell,switchPlayer,printGameBoard};
+    return {chooseCell,checkWinner};
 }
 
 //Game functionality
@@ -97,19 +101,37 @@ function Game(){
             container.appendChild(div);
             if(i%3 == 0){j++;} // j increases once every 3 iterations
             div.addEventListener("click", ()=>{
-                gameState = board.chooseCell(div.dataset.row,div.dataset.column);
+                gameState = board.chooseCell(parseInt(div.dataset.row), parseInt(div.dataset.col));
+                if (board.checkWinner()){
+                    console.log("WINNER DETECTED:", gameState);
+                    showWinnerPopup(gameState);
+                }
                 if (gameState == 1){
                     div.textContent = "X";
                 }
                 if(gameState == 2){
                     div.textContent = "O";
                 }
-                displayBoard();
             })
         }
     }
-
     displayBoard();
+
+    function showWinnerPopup(winner) {
+        const popup = document.createElement("div");
+        popup.textContent = `${winner === 1 ? "Player 1 (X)" : "Player 2 (O)"} wins!`;
+        popup.style.position = "fixed";
+        popup.style.top = "50%";
+        popup.style.left = "50%";
+        popup.style.transform = "translate(-50%, -50%)";
+        popup.style.padding = "20px";
+        popup.style.backgroundColor = "white";
+        popup.style.border = "2px solid black";
+        popup.style.fontSize = "24px";
+        popup.style.zIndex = "1000";
+        document.body.appendChild(popup);
+    }
+
 }
 
 Game();

@@ -1,11 +1,23 @@
-html, body{
+html,body{
     height: 100%;
-    width:100%;
+    width: 100%;
 }
 
-.container{
+body{
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.container {
     display: grid;
-    grid-template: repeat(9,minmax(100px,500px));
+    grid-template-columns: repeat(3, minmax(50px, 200px)); /* 3 equal-width columns */
+    grid-template-rows: repeat(3, minmax(50px, 200px)); /* 3 rows with flexible height */
+    gap: 5px; /* Optional: adds spacing between cells */
+    width: fit-content;
 }
 
 .board{
