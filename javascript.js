@@ -29,13 +29,22 @@ function GameBoard(){
         }
     }
 
+    //Reset board
+    function resetBoard(){
+        let j = 0
+        for(let i = 0 ; i < 9 ; i++){
+            board[j%3][i%3].setState(0);
+            if((i+1)%3 == 0){j++;} // j increases once every 3 iterations
+        }
+    }
+
     //Each cell's state
     function Cell(){
         let state = 0;
         const getState = ()=> state ;
 
-        const setState =  (player_token)=> {
-            state = player_token;
+        const setState =  (token)=> {
+            state = token;
         }
         return{getState, setState};
     }
@@ -82,7 +91,7 @@ function GameBoard(){
             return false;
     }
 
-    return {chooseCell,checkWinner};
+    return {chooseCell,checkWinner,resetBoard};
 }
 
 //Game functionality
@@ -96,14 +105,15 @@ function Game(){
         for(let i = 0 ; i < 9 ; i++){
             const div = document.createElement("div");
             div.classList.add("board");
-            div.setAttribute('data-row', i%3);
-            div.setAttribute('data-col', j%3);
+            div.setAttribute('data-row', j%3);
+            div.setAttribute('data-col', i%3);
             container.appendChild(div);
-            if(i%3 == 0){j++;} // j increases once every 3 iterations
+            if((i+1)%3 == 0){j++;} // j increases once every 3 iterations
             div.addEventListener("click", ()=>{
                 gameState = board.chooseCell(parseInt(div.dataset.row), parseInt(div.dataset.col));
                 if (board.checkWinner()){
                     console.log("WINNER DETECTED:", gameState);
+
                     showWinnerPopup(gameState);
                 }
                 if (gameState == 1){
@@ -115,22 +125,74 @@ function Game(){
             })
         }
     }
-    displayBoard();
+
+    function resetDisplay(){
+        let j = 0;
+        for(let i = 0 ; i < 9 ; i++){
+            const element = document.querySelector(`[data-row="${j%3}"][data-col="${i%3}"]`);
+            element.textContent = '';
+            if((i+1)%3 == 0){j++;} // j increases once every 3 iterations
+    }
+    }
+
+   
+    let p1_name;
+    let p2_name;
+
+    function showGameStartPopup() {
+        const form = document.querySelector('form');
+        // Create backdrop to block user from continue playing
+        const backdrop = document.createElement("div");
+        backdrop.classList.add("popup-backdrop");
+        document.body.appendChild(backdrop);
+
+        // Create Popup
+        const popup = document.createElement("div");
+        popup.classList.add("game-start-popup");
+        const container = document.querySelector(".container");
+        container.style.position = "relative";
+        document.body.appendChild(popup);
+        popup.appendChild(form);
+
+        //Close popup button
+        form.addEventListener("submit", (event)=>{
+            event.preventDefault(); 
+            //Reads data after input 
+            const data = new FormData(form);
+            p1_name = data.get('Player1_Name');
+            p2_name = data.get('Player2_Name');
+            popup.remove();
+            backdrop.remove();
+        });
+    }
 
     function showWinnerPopup(winner) {
+        // Create backdrop to block user from continue playing
+        const backdrop = document.createElement("div");
+        backdrop.classList.add("popup-backdrop");
+        document.body.appendChild(backdrop);
+        //Create popup
         const popup = document.createElement("div");
-        popup.textContent = `${winner === 1 ? "Player 1 (X)" : "Player 2 (O)"} wins!`;
-        popup.style.position = "fixed";
-        popup.style.top = "50%";
-        popup.style.left = "50%";
-        popup.style.transform = "translate(-50%, -50%)";
-        popup.style.padding = "20px";
-        popup.style.backgroundColor = "white";
-        popup.style.border = "2px solid black";
-        popup.style.fontSize = "24px";
-        popup.style.zIndex = "1000";
+        popup.classList.add("winner-popup");
+        popup.textContent = `${winner === 1 ? p1_name + ' (X)' : p2_name + ' (O)'} wins!`;
         document.body.appendChild(popup);
+
+        // Create restart button
+        const restartBtn = document.createElement("button");
+        restartBtn.classList.add("restart-button");
+        restartBtn.textContent = "Play Again";
+        restartBtn.addEventListener("click", ()=>{
+            board.resetBoard();
+            resetDisplay();
+            popup.remove();
+            backdrop.remove();
+        });
+        popup.appendChild(restartBtn);
     }
+
+    showGameStartPopup();
+    displayBoard();
+
 
 }
 

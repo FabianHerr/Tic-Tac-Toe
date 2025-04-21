@@ -7,6 +7,7 @@ body{
     margin: 0;
     height: 100vh;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     overflow: hidden;
@@ -14,13 +15,159 @@ body{
 
 .container {
     display: grid;
-    grid-template-columns: repeat(3, minmax(50px, 200px)); /* 3 equal-width columns */
-    grid-template-rows: repeat(3, minmax(50px, 200px)); /* 3 rows with flexible height */
-    gap: 5px; /* Optional: adds spacing between cells */
+    grid-template-columns: repeat(3, minmax(50px, 200px)); 
+    grid-template-rows: repeat(3, minmax(50px, 200px)); 
+    gap: 5px; 
     width: fit-content;
 }
+
 
 .board{
     border: 2px solid black;
     padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(2rem, 5vw, 4rem);
+    text-align: center;
+}
+
+html,body{
+    height: 100%;
+    width: 100%;
+}
+
+body{
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(50px, 200px)); 
+    grid-template-rows: repeat(3, minmax(50px, 200px)); 
+    gap: 5px; 
+    width: fit-content;
+}
+
+
+.board{
+    border: 2px solid black;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(2rem, 5vw, 4rem);
+    text-align: center;
+}
+
+/* Overall Page Background */
+body {
+    background: linear-gradient(135deg, #c9d6ff 0%, #e2e2e2 50%, #f6b18d 100%);
+    font-family: 'Comic Sans MS', 'Comic Neue', cursive, sans-serif;
+}
+
+/* Game Board Cells */
+.board {
+    background-color: #ffffff;
+    border: 3px solid #333;
+    border-radius: 10px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.board:hover {
+    background-color: #f0f0f0;
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+/* Game Start Popup */
+.game-start-popup {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 30px;
+    background-color: #fff;
+    border: 3px solid #333;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    z-index: 1000;
+    text-align: center;
+}
+
+.game-start-popup input {
+    margin: 10px 0;
+    padding: 10px;
+    border: 2px solid #333;
+    border-radius: 8px;
+    width: 80%;
+    font-size: 1rem;
+}
+
+.game-start-popup button {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #2e86de;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.game-start-popup button:hover {
+    background-color: #1e60a6;
+}
+
+/* Winner Popup */
+.winner-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 25px 40px;
+    background-color: #fff;
+    border: 3px solid #28a745;
+    border-radius: 12px;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #28a745;
+    z-index: 1000;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    text-align: center;
+}
+
+/* Backdrop behind popups */
+.popup-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 999;
+}
+
+/* Game Title Styling */
+.game-title {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #1e3d59;
+    margin-bottom: 20px;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Legend Styling */
+.form-legend {
+    font-size: 1.5rem;
+    color: #444;
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: bold;
 }
